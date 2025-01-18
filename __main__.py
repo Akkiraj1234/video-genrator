@@ -1,6 +1,6 @@
 from .error import Video_Gen_ERROR
 from .utility import is_path
-from .video_generator import generate
+from .video_generator import Generate
 
 import argparse
 import os
@@ -40,8 +40,9 @@ if __name__ == "__main__":
     if args.audio:
         audio = "some audio yay"
         
-    with generate(text, video, audio) as obj:
-    
+    with Generate(text, video, audio) as obj:
+        obj.execute()
+        
         if obj.status_code:
             print("video saved in path: ",obj.path)
         else:

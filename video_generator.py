@@ -5,9 +5,9 @@ from .assets import TTS_INFO
 
 
 class Generate:
-    def __init__(self, script, video, audio):
+    def __init__(self, script:str, video:str, audio:str) -> None:
         self.status_code = True
-        self.error = "None"
+        self.error = None
         self.path = None
         
         self.script = script
@@ -27,7 +27,7 @@ class Generate:
         self.tts = Tts(TTS_INFO)
     
     def execute(self):
-        audio_path = Tts.create(self.script)
+        audio_path = self.tts.create(self.script)
     
     
     
