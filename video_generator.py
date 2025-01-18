@@ -1,5 +1,5 @@
 from .TTS import Tts
-from .assets import TTS_INFO
+from .assets import TTS_INFO, Download_Path
 
 
 
@@ -11,8 +11,8 @@ class Generate:
         self.path = None
         
         self.script = script
-        self.video = video
-        self.audio = audio
+        self.video_path = video
+        self.audio_path = audio
     
     def __enter__(self):
         self.initialize_component()

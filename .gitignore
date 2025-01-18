@@ -1,4 +1,22 @@
+# Ignore Python virtual environments
 venv/
+
+# Ignore assets directory
 assets/
+
+# Ignore trash directory
 trash/
 
+# Ignore compiled Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files (optional, depending on your IDE)
+.idea/
+.vscode/
+*.swp

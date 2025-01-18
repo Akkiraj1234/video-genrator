@@ -1,5 +1,4 @@
-import os
-import json
+from .utility import json, os
 
 # Default settings
 DEFAULT_SETTINGS = {

@@ -1,5 +1,5 @@
-import re
 from googletrans import Translator
+import os, json, re
 
 def is_path(text):
     """
