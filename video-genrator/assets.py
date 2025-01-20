@@ -1,5 +1,7 @@
 from .utility import json, os
 
+dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Default settings
 DEFAULT_SETTINGS = {
     "TTS_info": {
@@ -7,9 +9,9 @@ DEFAULT_SETTINGS = {
         "slow": False
     },
     "Download_path": os.path.expanduser("~/Downloads"),
-    "Temp_path": os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+    "Temp_path": os.path.join(dir_name, "assets")
 }
-SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "settings.json")
+SETTINGS_FILE = os.path.join(dir_name, "settings.json")
 
 
 def load_settings():
