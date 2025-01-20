@@ -8,6 +8,7 @@
         "googletrans",
         "gtts",
         "inteparator",
-        "pyttsx"
+        "pyttsx",
+        "synctext"
     ]
 }

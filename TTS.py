@@ -1,6 +1,10 @@
 from .error import InternetError
 from .assets import TTS_INFO, Temporary_File_Path, clear_current_session
-from .utility import translate_text, os
+from .utility import (
+    translate_text,
+    convert_to_wave,
+    os
+)
 
 from gtts import gTTS, gTTSError
 
@@ -8,6 +12,7 @@ from gtts import gTTS, gTTSError
 # 1. every function should have script and lang argument
 #   - script: the text to create tts
 #   - lang : in which language to create the tts
+#   - should return wav audio file path
 
 # why we using the getpid for tts_output name 
     # - can only contain 1 audio file for 1 python inteparator
@@ -34,7 +39,7 @@ def TTS_gtts(script:str, tts_info:dict, lang:str = "en") -> str:
         lang (str, optional): The language of the text. Defaults to "en".
 
     Returns:
-        str: The path of the generated audio file.
+        str: The path of the generated wav audio file.
     """
     try:
         tts = gTTS(
@@ -45,7 +50,7 @@ def TTS_gtts(script:str, tts_info:dict, lang:str = "en") -> str:
         )
         audio_file_path = get_file_path()
         tts.save(audio_file_path)
-        return audio_file_path
+        return convert_to_wave(audio_file_path)
     
     except gTTSError as e:
         raise InternetError(e)
@@ -69,7 +74,7 @@ class Tts:
     
     def create(self, script, lang = "en") -> str:
         translated_text = translate_text(script, lang)
-        return self.tts(translated_text, lang, TTS_INFO)
+        return self.tts(translated_text, TTS_INFO, lang)
         
         
 

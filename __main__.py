@@ -1,4 +1,4 @@
-from .error import Video_Gen_ERROR
+from .error import VideoGenError
 from .utility import is_path
 from .video_generator import Generate
 
@@ -21,7 +21,7 @@ def open_script(object: str) -> str:
             with open(absolute_path, "r", encoding="utf-8") as file:
                 return file.read()
         else:
-            raise Video_Gen_ERROR(f"PATH '{absolute_path}' is not valid")
+            raise VideoGenError(f"PATH '{absolute_path}' is not valid")
     elif object is None:
         return "some text"
     

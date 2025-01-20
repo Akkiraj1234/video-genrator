@@ -1,4 +1,6 @@
 from .TTS import Tts
+from .SyncText import Word_Duration_Estimation
+
 from .assets import TTS_INFO, Download_Path
 
 
@@ -28,6 +30,11 @@ class Generate:
     
     def execute(self):
         audio_path = self.tts.create(self.script)
+        timestamps = Word_Duration_Estimation(audio_path)
+        timestamps.synctext()
+        words = timestamps.words
+        # now video generation works
+        
     
     
     
