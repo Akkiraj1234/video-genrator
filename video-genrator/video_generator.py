@@ -4,8 +4,6 @@ from .SyncText import Word_Duration_Estimation
 from .assets import TTS_INFO, Download_Path
 
 
-
-
 class Generate:
     def __init__(self, script:str, video:str, audio:str) -> None:
         self.status_code = True

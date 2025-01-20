@@ -9,9 +9,9 @@ DEFAULT_SETTINGS = {
         "slow": False
     },
     "Download_path": os.path.expanduser("~/Downloads"),
-    "Temp_path": os.path.join(dir_name, "assets")
+    "Temp_path": os.path.join(dir_name, "trash")
 }
-SETTINGS_FILE = os.path.join(dir_name, "settings.json")
+SETTINGS_FILE = os.path.join(dir_name,"assets","settings.json")
 
 
 def load_settings():
