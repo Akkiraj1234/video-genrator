@@ -1,4 +1,4 @@
-from moviepy import (
+from moviepy.editor import (
     VideoFileClip,
     CompositeVideoClip,
     ImageClip,
@@ -55,9 +55,9 @@ def create_subtitle_clip(text_image: Image, s_time: float, e_time: float):
     """
     temp_path = os.path.join(Temporary_File_Path, "image.png")
     text_image.save(temp_path)
-    text_clip = ImageClip(temp_path).with_duration(e_time - s_time)
-    text_clip = text_clip.with_position(("center", "center"))
-    text_clip = text_clip.with_start(s_time).with_end(e_time)
+    text_clip = ImageClip(temp_path).set_duration(e_time - s_time)
+    text_clip = text_clip.set_position(("center", "center"))
+    text_clip = text_clip.set_start(s_time).set_end(e_time)
     return text_clip
 
 
@@ -104,7 +104,28 @@ class GenerateVideo:
         ]
         
         final_video = CompositeVideoClip([video, *subtitle_clips])
-        mixed_audio = CompositeAudioClip([main_audio.volumex(0.7), background_audio.volumex(0.3)])
+        mixed_audio = CompositeAudioClip([main_audio])
         final_video = final_video.set_audio(mixed_audio)
         final_video.write_videofile(output_path, codec="libx264", audio_codec="aac")
 
+def generate_subtitles(text:str, timestamps):
+    subtitles = []
+    texts = text.split(" ")
+    
+    if len(timestamps) < len(texts):
+        last_timestamp = timestamps[-1] if timestamps else 0
+        timestamps.extend([last_timestamp + i * 5000 for i in range(1, len(texts) - len(timestamps) + 1)])
+    elif len(timestamps) > len(texts):
+        timestamps = timestamps[:len(texts)]
+        
+    for i, text in enumerate(texts):
+        start_time = timestamps[i] / 1000  
+        end_time = (timestamps[i + 1] / 1000) if i + 1 < len(timestamps) else start_time + 5
+
+        subtitles.append((
+            text,
+            start_time,
+            end_time
+        ))
+
+    return subtitles

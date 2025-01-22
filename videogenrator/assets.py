@@ -118,16 +118,6 @@ assets = Assets()
 
 
 
-
-
-
-
-
-
-
-
-
-
 # Load available fonts
 try:
     Fonts_List = os.listdir(FONTS_PATH)
@@ -171,7 +161,18 @@ def font_byname(name: str) -> str:
 
 
 # Load the settings and validate paths
-settings = load_settings()
+settings = {
+            "TTS_info": {
+                "use_services": "gtts",
+                "slow": False,
+            },
+            "Fonts_info": {
+                "default": "Rain Night",
+                "size":24
+            },
+            "Download_path": FALLOUT_DOWNLOAD_PATH,
+            "Temp_path": FALLOUT_TEMP_PATH,
+        }
 TTS_INFO = settings["TTS_info"]
 FONTS_INFO = settings["Fonts_info"]
 Temporary_File_Path = settings["Temp_path"]
@@ -184,7 +185,7 @@ if not os.path.exists(Temporary_File_Path):
         logging.info(f"Temporary directory created: {Temporary_File_Path}")
     except OSError as e:
         logging.error(f"Failed to create temporary directory: {e}")
-        Temporary_File_Path = DEFAULT_SETTINGS["Temp_path"]
+        Temporary_File_Path = settings["Temp_path"]
 
 # Exported variables and functions
 __all__ = ["Temporary_File_Path", "clear_current_session", "TTS_INFO", "Download_Path", "font_byname"]
