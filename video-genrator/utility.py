@@ -1,6 +1,13 @@
 from googletrans import Translator
 from pydub import AudioSegment
-import os, json, re
+from typing import TextIO
+
+import os
+import re
+import json
+import logging
+
+
 
 def convert_to_wave(audio_path:str ) -> str:
     """

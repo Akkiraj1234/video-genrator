@@ -1,49 +1,88 @@
+from .logger import setup_logging
+from .assets import assets
 from .error import VideoGenError
-from .utility import is_path
+from .utility import is_path, logging, os
+from .parser import VideoConfigParser
 from .video_generator import Generate
-
 import argparse
-import os
 
-parser = argparse.ArgumentParser(description="A simple python code to create video clips")
-parser.add_argument("script", type=str, help="script or file path to the script")
-parser.add_argument("--video", type=str, help="path to the video")
-parser.add_argument("--audio", type=str, help="path to the audio file")
 
 def open_script(object: str) -> str:
     """
     Opens the script if it's a valid path or returns the text directly.
     Resolves paths to absolute paths.
     """
-    if is_path(object):  # Check if the input looks like a path
-        absolute_path = os.path.abspath(object)  # Resolve to absolute path
-        if os.path.exists(absolute_path):  # Check if the path exists
+    logging.debug(f"Processing input: {object}")
+    
+    if is_path(object):
+        absolute_path = os.path.abspath(object)
+        logging.info(f"File found: {absolute_path}. Attempting to open.")
+        try:
             with open(absolute_path, "r", encoding="utf-8") as file:
                 return file.read()
-        else:
-            raise VideoGenError(f"PATH '{absolute_path}' is not valid")
-    elif object is None:
-        return "some text"
+        except Exception as e:
+            logging.error(f"Error reading file {absolute_path}: {e}")
+            raise
     
+    elif object is None:
+        logging.warning("No input provided; `object` is None. Input cannot be None.")
+        raise ValueError("Input cannot be None.")
+    
+    logging.info("Input is treated as raw script text.")
     return object
 
-if __name__ == "__main__":
+def initialize_argparse():
+    """
+    Initializes and returns an ArgumentParser for the video generation tool.
+    """
+    parser = argparse.ArgumentParser(
+        description=(
+            "Video Generator Tool: A command-line utility to create video clips from a script. "
+            "Provide either a path to a script file or the script text directly as input."
+        ),
+        epilog=(
+            "Example usage:\n"
+            "  python video_generator.py 'path/to/script.txt'  # Process a script file\n"
+            "  python video_generator.py 'Raw script text here'  # Process inline script text\n"
+        ),
+        formatter_class=argparse.RawTextHelpFormatter 
+    )
+    
+    parser.add_argument(
+        "script", type=str,
+        help=(
+            "The script to be used for generating the video. "
+            "Provide either:\n"
+            "  - A valid file path to a script file, or\n"
+            "  - The raw script text enclosed in quotes."
+        ),
+    )
+    return parser
+
+def main() -> int:
+    # setting up logging and assets
+    setup_logging()
+    logging.info("Application Started")
+    assets.load_Assets()
+    
+    #setting up parser and stuff
+    parser = initialize_argparse()
     args = parser.parse_args()
-    
     text = open_script(args.script)
-    video = None
-    audio = None
     
-    if args.video:
-        video = "some video yay"
-        
-    if args.audio:
-        audio = "some audio yay"
-        
-    with Generate(text, video, audio) as obj:
-        obj.execute()
-        
-        if obj.status_code:
-            print("video saved in path: ",obj.path)
-        else:
-            print("video generation failed error: ", obj.error)
+    # creating parser object
+    parser = VideoConfigParser(text)
+    video = Generate(parser)
+    video.execute()
+    
+    if video.status_code:
+        logging.debug(f"Video successfully created. Output saved to: {video.path}")
+    else:
+        logging.error(f"Video generation failed. Error: {video.error}")
+        raise VideoGenError(video.error)
+    
+    return 0
+
+
+if __name__ == "__main__":
+    main()

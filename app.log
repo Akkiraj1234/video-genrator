@@ -1,0 +1,5 @@
+2025-01-22 19:11:50,191 - root - INFO [ 30 ] : Logging setup complete. Logs will be saved to /home/akkiraj/Desktop/video-genrator/app.log
+2025-01-22 19:11:50,191 - root - INFO [ 65 ] : Application Started
+2025-01-22 19:11:50,192 - root - DEBUG [ 15 ] : Processing input: demo1.txt
+2025-01-22 19:11:50,192 - root - INFO [ 19 ] : File found: /home/akkiraj/Desktop/video-genrator/demo1.txt. Attempting to open.
+2025-01-22 19:11:50,193 - video-genrator.parser - ERROR [ 9 ] : idk what the fuck happening

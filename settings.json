@@ -1,8 +1,0 @@
-{
-    "TTS_info": {
-        "use_services": "gtts",
-        "slow": false
-    },
-    "Download_path": "/home/akkiraj/Downloads",
-    "Temp_path": "/home/akkiraj/Desktop/video-genrator/trash"
-}

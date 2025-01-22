@@ -1,0 +1,24 @@
+[assets]
+video1 = "assets/video1.mp4"
+video2 = "assets/video2.mp4"
+
+[video-settings]
+clip1.video = "video1"
+clip1.effects-begin = "fadeup"
+clip1.effects-end =  "fadeout"
+clip1.duration = 3
+clip2.video = "video2"
+clip2.effects = "snowfall"
+clip2.duration = 5
+
+[script-settings]
+script-time-exceed-video-increase = True
+script-printing-style = "normal"
+script-style = "fading"
+
+clip1.script = "Welcome to the best video editing tool!"
+clip2.script = "Here are your steps to success:\n1. Plan.\n2. Create.\n3. Edit.\n4. Share."
+
+[video-creation]
+video-size-aspect-ratio = "16:9"
+sequence = [clip1, countdown.3, clip2]

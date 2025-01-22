@@ -1,46 +1,132 @@
 from .error import AssetsNotAvailableError, InvalidFontError
-from .utility import json, os, logging
+from .utility import logging, json, os
 
-def setup_logging():
-    # terminal level logger
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.WARNING)
-    console_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    console_handler.setFormatter(console_formatter)
+# setting up logging and path
+logger = logging.getLogger(__name__)
 
-    # file level logger
-    file_handler = logging.FileHandler(os.path.join(dir_name,"app.log"))
-    file_handler.setLevel(logging.DEBUG)
-    file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s [ %(lineno)s ] : %(message)s")
-    file_handler.setFormatter(file_formatter)
-
-    # the root logger
-    logging.basicConfig(
-        level=logging.DEBUG, 
-        handlers=[console_handler, file_handler]
-    )
+APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SETTINGS_FILE = os.path.join(APP_DIR, "assets", "settings.json")
+FONTS_PATH = os.path.join(APP_DIR,"assets", "fonts")
+FALLOUT_DOWNLOAD_PATH = os.path.expanduser("~/Downloads")
+FALLOUT_TEMP_PATH = os.path.join(APP_DIR, "trash")
 
 
-# Directory paths
-dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+class Assets:
+    
+    def __init__(self):
+        self.APP_DIR = APP_DIR
+        self.SETTINGS_FILE = SETTINGS_FILE
+        self.FONTS_PATH = FONTS_PATH
+        self.FALLOUT_DOWNLOAD_PATH = FALLOUT_DOWNLOAD_PATH
+        self.FALLOUT_TEMP_PATH = FALLOUT_TEMP_PATH
+    
+    @property
+    def default_setting(self) -> None:
+        return {
+            "TTS_info": {
+                "use_services": "gtts",
+                "slow": False,
+            },
+            "Fonts_info": {
+                "default": "Rain Night",
+                "size":24
+            },
+            "Download_path": FALLOUT_DOWNLOAD_PATH,
+            "Temp_path": FALLOUT_TEMP_PATH,
+        }
+        
+    def __write_data_json(self, path:str, data:dict):
+        pass
+    
+    def _load_setting_data(self) -> dict:
+        """
+        Load or initialize the settings file.
+        """
+        if not os.path.exists(SETTINGS_FILE):
+            logger.info("Settings file not found. Creating a new one with default settings.")
+            self.__write_data_json(SETTINGS_FILE, self.default_setting)
+            
+        try:
+            with open(SETTINGS_FILE, "r") as file:
+                settings = json.load(file)
+            
+            for key, default_value in self.default_setting.items():
+                settings.setdefault(key, default_value)
+            
+            self.__write_data_json(SETTINGS_FILE, settings)
+            return settings
+        
+        except json.JSONDecodeError as e:
+            logger
+            return self.default_setting
+        
+        except (IOError, PermissionError) as e:
+            logger.error(f"Error reading settings file: {e}")
+            return self.default_setting
+    
+    def _check_assets(self):
+        media_assets = [
+            "image1.jpg",
+            "image2.jpg",
+            "image3.jpg",
+            "image4.jpg",
+            "image5.jpg",
+            "video1.mp4",
+            "video2.mp4",
+            "music1.mp3",           
+        ]
+        fonts_assets = [
+            "Agiven-Drawn.otf",
+            "BeachyLagoon.ttf",
+            "Blonden-ExtrudeRight.otf",
+            "BrandenRounded-Regular.otf",
+            "Grownup.ttf",
+            "Rain Night.ttf"
+        ]
+        
+    
+    def _check_and_clear_trash(self):
+        pass
+    
+    def load_settings(self) -> dict:
+        self._load_setting_data()
+        self._check_assets()
+        self._check_and_clear_trash()
+        
+        
+    def load_Assets(self) -> None:
+        pass
+    
+    def clear_current_session(self) -> None:
+        pass
+    
+    def get_font_by_name(self, name:str) -> str:
+        pass
+    
+    def create_temp(self, name:str) -> str:
+        pass
+    
 
-# Default settings
-DEFAULT_SETTINGS = {
-    "TTS_info": {
-        "use_services": "gtts",
-        "slow": False,
-    },
-    "Fonts_info": {
-        "default": "Rain Night",
-        "size":24
-    },
-    "Download_path": os.path.expanduser("~/Downloads"),
-    "Temp_path": os.path.join(dir_name, "trash"),
-}
+assets = Assets()
+    
 
-# File paths
-SETTINGS_FILE = os.path.join(dir_name, "assets", "settings.json")
-FONTS_PATH = os.path.join(dir_name, "fonts")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Load available fonts
 try:
@@ -50,37 +136,12 @@ try:
 except FileNotFoundError:
     raise AssetsNotAvailableError(f"Fonts directory not found: {FONTS_PATH}")
 
+#
 # Functions
 
 
-def load_settings() -> dict:
-    """Load or initialize the settings file."""
-    if not os.path.exists(SETTINGS_FILE):
-        logging.info("Settings file not found. Creating a new one with default settings.")
-        with open(SETTINGS_FILE, "w") as file:
-            json.dump(DEFAULT_SETTINGS, file, indent=4)
-        return DEFAULT_SETTINGS
 
-    try:
-        with open(SETTINGS_FILE, "r") as file:
-            settings = json.load(file)
 
-        # Validate and populate missing keys with defaults
-        for key, default_value in DEFAULT_SETTINGS.items():
-            settings.setdefault(key, default_value)
-
-        # Update settings file if defaults were added
-        with open(SETTINGS_FILE, "w") as file:
-            json.dump(settings, file, indent=4)
-
-        return settings
-
-    except json.JSONDecodeError as e:
-        logging.error(f"Invalid JSON in settings file: {e}")
-        return DEFAULT_SETTINGS
-    except IOError as e:
-        logging.error(f"Error reading settings file: {e}")
-        return DEFAULT_SETTINGS
 
 
 def clear_current_session() -> None:

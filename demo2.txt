@@ -1,0 +1,54 @@
+[assets]
+img1 = "assets/img1"
+img2 = "assets/img2"
+img3 = "assets/img3"
+img4 = "assets/img4"
+img5 = "assets/img5"
+video1 = "assets/video2.mp4"
+audio1 = "assets/Anya Nami.mp3"
+
+[video-settings]
+transition = "fade"
+duration = 3
+
+clip1.video = video1
+clip1.duration = 5
+clip1.script = "Top anime you can watch to get total emotional damage"
+
+clip2.video = img1
+clip2.effects = snowfall
+clip2.script = "1. 5 centimeter per seconds"
+
+clip3.video = img2
+clip3.effects = snowfall
+clip3.script = "2. I Want to eat your pancreas"
+
+clip4.video = img3
+clip4.effects = snowfall
+clip4.script = "3. Summer ghost"
+
+clip5.video = img4
+clip5.effects = snowfall
+clip5.script = "4. Your name"
+
+clip6.video = img5
+clip6.effects = snowfall
+clip6.script = "5. Weathering with you"
+
+[script-settings]
+script-time-exceed-video-increase = True
+script-printing-style = "sentence"
+script-style = "fading"
+clip1.subtitles.font-size = 30
+clip1.subtitles.color = "white"
+
+[video-creation]
+video-size-aspect-ratio = 16:9
+background_audio = [audio1]
+sequence = [
+    clip1,wait.2, clip2, clip3, clip4, clip4, clip5, clip6
+]
+
+[output-settings]
+format = "mp4"
+name = "demo2"
